@@ -1,6 +1,0 @@
-FROM typesense/typesense:0.25.1
-
-ENV TYPESENSE_API_KEY=secret
-ENV TYPESENSE_DATA_DIR=/data
-
-EXPOSE 8108
