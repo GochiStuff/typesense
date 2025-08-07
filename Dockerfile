@@ -1,15 +1,18 @@
 FROM typesense/typesense:0.25.1
 
-# Add curl for optional health checks (optional)
-RUN apk add --no-cache curl
+# Optional: install curl for health checks or debugging
+RUN apt-get update && apt-get install -y curl && apt-get clean
 
-# Set environment variables using Render's internal ENV system
-ENV TYPESENSE_API_KEY=secret
-ENV TYPESENSE_DATA_DIR=/data
-ENV TYPESENSE_ENABLE_CORS=true
+# Set environment variables using Render dashboard (not in Dockerfile)
+# Example:
+# ENV TYPESENSE_API_KEY=xyz
+# ENV TYPESENSE_DATA_DIR=/data
 
-# Expose Typesense default port
+# Create required directories
+RUN mkdir -p /data
+
+# Expose the port Typesense listens on
 EXPOSE 8108
 
-# Run the server
-CMD ["--data-dir", "/data", "--api-key", "xyzsecret", "--enable-cors"]
+# Start Typesense
+CMD ["/opt/typesense-server/typesense-server", "--data-dir", "/data", "--api-key", "$TYPESENSE_API_KEY"]
